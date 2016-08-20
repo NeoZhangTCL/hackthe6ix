@@ -14,5 +14,6 @@ qx.Theme.define("hackthesix.theme.Color",
 
   colors :
   {
+  	
   }
 });

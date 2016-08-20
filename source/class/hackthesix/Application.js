@@ -58,7 +58,6 @@ qx.Class.define("hackthesix.Application",
 
       // Document is the application root
       var doc = this.getRoot();
-
       init(doc);
 
       // Add button to document at fixed coordinates
@@ -69,18 +68,44 @@ qx.Class.define("hackthesix.Application",
         alert("Hello World!");
       });*/
 
-      function init(HTMLpage) {
-        createTree(HTMLpage);
+      function init(page) {
+        showProgressBar(page);
+        createToolbar(page);
+        createTree(page);
       }
 
-      function createTree(HTMLpage) {
+      function showProgressBar(page) {
+        var pBar = new qx.ui.indicator.ProgressBar();
+        pBar.setMaximum(100);
+        page.add(pBar, {left: 550,top:250});
+        for (var i = 0; i <= 100; i+=20) {
+          setTimeout(pBar.setValue(i),100000);
+          if (i == 100) {
+            page.remove(pBar);
+          }
+        }
+      }
+
+      function createToolbar(page) {
+        var toolbar = new qx.ui.toolbar.ToolBar();
+
+        page.add(toolbar, {left:0, top:0});
+
+        var fileBtn = new qx.ui.toolbar.MenuButton("File");  
+        toolbar.add(fileBtn);
+      }
+
+      function createTree(page) {
         var tree = new qx.ui.tree.Tree();
         tree.set({
-          width: 150,
-          height: 300
+          width: 160,
+          height: 500
         });
 
-        HTMLpage.add(tree, {left:30, top: 20});
+        //tree.applyRootOpenClose();
+        tree.setRootOpenClose(true);
+
+        page.add(tree, {left:5, top: 50});
 
         var treeRoot = new qx.ui.tree.TreeFolder('Project');
         tree.setRoot(treeRoot);
@@ -90,6 +115,20 @@ qx.Class.define("hackthesix.Application",
         var analysisDir = new qx.ui.tree.TreeFolder("Analysis");
 
         treeRoot.add(stocksDir,graphsDir,analysisDir);
+        var demoRight = new qx.ui.form.TextArea("");
+        demoRight.setWidth(700);
+        showSplitScreen(page,tree,demoRight);
+      }
+
+      function showSplitScreen(page,left,right) {
+        var pane = new qx.ui.splitpane.Pane("horizontal");
+        pane.add(left, 0);
+        pane.add(right,1);
+        page.add(pane, {left:5,top:50});
+      }
+
+      function renameFile(file) {
+
       }
 
     }
