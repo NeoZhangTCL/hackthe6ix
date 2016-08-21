@@ -101,9 +101,14 @@ qx.Class.define("hackthesix.Application",
         var uploadBtn = new qx.ui.toolbar.Button("Upload");
         var runBtn = new qx.ui.toolbar.Button("Run");
         var debugBtn = new qx.ui.toolbar.Button("Debug");
+        var clearBtn = new qx.ui.toolbar.Button("Clear");
 
         runBtn.addListener("tap", function() {
           readTextForTicker();
+        }, this);
+
+        clearBtn.addListener("tap", function() {
+          clearScreen();
         }, this);
 
         toolbar.add(fileBtn);
@@ -177,14 +182,15 @@ qx.Class.define("hackthesix.Application",
 
       function readTextForTicker() {
         var currText = demoRight.getValue();
-        var ticker = findAllCaps(currText);
-        if (checkTicker(ticker) === false) {
-          alert("Please print stock ticker in all caps!");
-        } else { 
-          grabStockData(ticker);
-          clearScreen();
+        if (findKeywords(currText) === false) {
+          var ticker = findAllCaps(currText);
+          if (checkTicker(ticker) === false) {
+            alert("Please print stock ticker in all caps!");
+          } else { 
+            grabStockData(ticker);
+            clearScreen();
+          }
         }
-
       }
 
       function findAllCaps(wholeText) {
@@ -202,8 +208,27 @@ qx.Class.define("hackthesix.Application",
         return "";
       }
 
+      function findKeywords(text) {
+        var textArr = text.split(" ");
+        for (var i = 0; i < textArr.length; i++) {
+          if (textArr[i].toLowerCase() === "compare") {
+            compareCurrStocks();
+            return true;  
+          }
+        }
+        return false;
+      }
+
       function checkTicker(ticker) {
         return ticker != "";
+      }
+
+      function compareCurrStocks() {
+        var output = "";
+        for (var i = 0; i < tableData.length; i++) {
+          output += tableData[i].toString();
+        }
+        demoRight.setValue(output);
       }
 
       function clearScreen() {
