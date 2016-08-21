@@ -1,11 +1,7 @@
 /* ************************************************************************
-
    Copyright:
-
    License:
-
    Authors:
-
 ************************************************************************ */
 
 /**
@@ -56,7 +52,7 @@ qx.Class.define("hackthesix.Application",
       // Document is the application root
       var doc = this.getRoot();
 
-      var placeholderText = 'Type in here to enter commands, use the Folders on side panel for more specific functions & tools (can only take ticker in all caps at this moment) - Example: "Find most recent MSFT prices and model what prices might look like if prices increase by 20% in 2 years."'
+      var placeholderText = 'Type in stock tickers (can only take ticker in all caps at this moment) - Example: "Find most recent MSFT prices"';
       var demoRight = new qx.ui.form.TextArea("");
       demoRight.setPlaceholder(placeholderText);
       demoRight.setWidth(700);
@@ -139,7 +135,6 @@ qx.Class.define("hackthesix.Application",
         function createDir(dirName) {
           var newDir = new qx.ui.tree.TreeFolder(dirName);
           dirArrMap.push(newDir);
-          addDirListeners(dirName,newDir);
           treeRoot.add(newDir);
         }
 
@@ -154,12 +149,10 @@ qx.Class.define("hackthesix.Application",
       }
 
       function createStockTable(page) {
-        //tableModel.setData(grabStockData(5000));
         page.add(stockTable, {left: 890, top: 50});
       }
 
       function updateStockTable(data, ticker) { 
-        //alert("I'm here");
         var price = data.dataset.data[0][4];
         alert(ticker + " price loaded.");
         tableID++;
@@ -217,7 +210,7 @@ qx.Class.define("hackthesix.Application",
         demoRight.setValue("");
       }
 
-      function addDirListeners(dirName,dir) {
+      /*function addDirListeners(dirName,dir) {
         switch(dirName) {
           case "Stocks":
             dir.addListener("dblclick", function() {
@@ -247,28 +240,24 @@ qx.Class.define("hackthesix.Application",
         }
       }
          
-      /*function placePopup(popupContent) {
+      function placePopup(popupContent) {
         var popup = new qx.ui.popup.Popup(popupContent);
         popup.placeToMouse(pageCenter);
         popup.show();
       }
-
       function createStockChart() {
         var stockChart = new qx.ui.embed.Html();
         var HTMLContentStr = "<b>Test</b>";
         stockChart.setHtml(HTMLContentStr);
-
         placePopup(eventLocation,stockChart);
       }
-
       function createChartWin() { 
-
-      }*/
+      }
 
       function errorMsg() {
         alert("ERROR!");  
       }
-
+    */
     }
   }
 });
