@@ -86,9 +86,12 @@ qx.Class.define("hackthesix.Application",
         var fileBtn = new qx.ui.toolbar.MenuButton("File");  
         var uploadBtn = new qx.ui.toolbar.Button("Upload");
         var runBtn = new qx.ui.toolbar.Button("Run");
+        var debugBtn = new qx.ui.toolbar.Button("Debug");
+
         toolbar.add(fileBtn);
         toolbar.add(uploadBtn);
         toolbar.add(runBtn);
+        toolbar.add(debugBtn);
       }
 
       function createTree(page) {
@@ -118,9 +121,10 @@ qx.Class.define("hackthesix.Application",
           treeRoot.add(newDir);
         }
 
-        var demoRight = new qx.ui.form.TextArea("");
+        var demoText = 'Type in here to enter commands, use the Folders on side panel for more specific functions - Example: "Find most recent Microsoft prices and model what prices might look like if increase by 20% in 2 years."'
+        var demoRight = new qx.ui.form.TextArea(demoText);
         demoRight.setWidth(700);
-        demoRight.setWrap(false);
+        demoRight.setWrap(true);
         showSplitScreen(page,tree,demoRight);
       }
 
