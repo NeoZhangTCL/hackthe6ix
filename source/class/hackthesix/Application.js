@@ -56,7 +56,23 @@ qx.Class.define("hackthesix.Application",
       // Document is the application root
       var doc = this.getRoot();
 
+      var placeholderText = 'Type in here to enter commands, use the Folders on side panel for more specific functions & tools (can only take ticker in all caps at this moment) - Example: "Find most recent MSFT prices and model what prices might look like if prices increase by 20% in 2 years."'
+      var demoRight = new qx.ui.form.TextArea("");
+      demoRight.setPlaceholder(placeholderText);
+      demoRight.setWidth(700);
+      demoRight.setWrap(true);
+
+      var tableModel = new qx.ui.table.model.Simple();
+      tableModel.setColumns(["ID","Ticker","Company name", "Price"]);
+      var stockTable = new qx.ui.table.Table(tableModel).set({
+          decorator: null,
+          height: 500,
+          width: 400
+      });
+
       init(doc);
+
+
 
       /* View init as main function */
       function init(page) {
@@ -88,6 +104,10 @@ qx.Class.define("hackthesix.Application",
         var runBtn = new qx.ui.toolbar.Button("Run");
         var debugBtn = new qx.ui.toolbar.Button("Debug");
 
+        runBtn.addListener("tap", function() {
+          readTextForTicker();
+        }, this);
+
         toolbar.add(fileBtn);
         toolbar.add(uploadBtn);
         toolbar.add(runBtn);
@@ -109,7 +129,7 @@ qx.Class.define("hackthesix.Application",
         tree.setRoot(treeRoot);
         treeRoot.setOpen(true);
 
-        var dirNameArr = ["Stocks","Models","Charting","Analysis","Code"];
+        var dirNameArr = ["Stocks","Models","Futures","Charting","Analysis","Code"];
         var dirArrMap = new Array();
 
         dirNameArr.forEach(createDir);
@@ -121,10 +141,6 @@ qx.Class.define("hackthesix.Application",
           treeRoot.add(newDir);
         }
 
-        var demoText = 'Type in here to enter commands, use the Folders on side panel for more specific functions - Example: "Find most recent Microsoft prices and model what prices might look like if increase by 20% in 2 years."'
-        var demoRight = new qx.ui.form.TextArea(demoText);
-        demoRight.setWidth(700);
-        demoRight.setWrap(true);
         showSplitScreen(page,tree,demoRight);
       }
 
@@ -136,21 +152,15 @@ qx.Class.define("hackthesix.Application",
       }
 
       function createStockTable(page) {
-
-        var tableModel = new qx.ui.table.model.Simple();
-        tableModel.setColumns(["ID","Ticker","Company name", "Price"]);
-        tableModel.setData(grabStockData(5000));
-
-        var stockTable = new qx.ui.table.Table(tableModel).set({
-          decorator: null,
-          height: 500,
-          width: 400
-        });
-
+        //tableModel.setData(grabStockData(5000));
         page.add(stockTable, {left: 880, top: 50});
       }
 
-      function grabStockData(rowCount) {
+      function updateStockTable() { 
+        tableModel.setData()
+      }
+
+      function grabStockData(ticker) {
         /* Using fake data right now */
         var rowData = [];
         var randomTicker = "ticker";
@@ -161,6 +171,41 @@ qx.Class.define("hackthesix.Application",
           rowData.push([id++,randomTicker, randomName, Math.random() * 100 ]);
         }
         return rowData;
+      }
+
+      function readTextForTicker() {
+        var currText = demoRight.getValue();
+        var ticker = findAllCaps(currText);
+        if (checkTicker(ticker) === false) {
+          alert("Please print stock ticker in all caps!");
+        } else { 
+          grabStockData(ticker);
+          clearScreen();
+        }
+
+      }
+
+      function findAllCaps(wholeText) {
+        var textArr = wholeText.split(" ");
+        var ticker = "";
+        
+        for (var i = 0; i < textArr.length; i++) {
+          if ( textArr[i] === textArr[i].toUpperCase() ) {
+            ticker = textArr[i];
+            confirm("Are you searching for " + ticker + " stock?");
+            return ticker;
+          }
+        }
+
+        return "";
+      }
+
+      function checkTicker(ticker) {
+        return ticker != "";
+      }
+
+      function clearScreen() {
+        demoRight.setValue(null);
       }
 
       function addDirListeners(dirName,dir) {
@@ -192,7 +237,7 @@ qx.Class.define("hackthesix.Application",
             break;    
         }
       }
-
+         
       function placePopup(popupContent) {
         var popup = new qx.ui.popup.Popup(popupContent);
         popup.placeToMouse(pageCenter);
@@ -209,6 +254,10 @@ qx.Class.define("hackthesix.Application",
 
       function createChartWin() { 
 
+      }
+
+      function errorMsg() {
+        alert("ERROR!");  
       }
 
     }
