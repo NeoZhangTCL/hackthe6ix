@@ -68,6 +68,7 @@ qx.Class.define("hackthesix.Application",
 
       var tableData = new Array();
       var tableID = 0;
+      var graphData = new Array();
       init(doc);
 
 
