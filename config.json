@@ -49,6 +49,12 @@
     "ROOT"         : "."
   },
 
+ /* "add-script":[
+    {
+      "uri": "https://code.jquery.com/jquery-3.1.0.min.js"
+    }
+  ],*/
+
   // You only need to edit the remainder of this file, if you want to customize
   // specific jobs, or add own job definitions.
 

@@ -161,7 +161,7 @@ qx.Class.define("hackthesix.Application",
       }
 
       function grabStockData(ticker) {
-        /* Using fake data right now */
+        /* Using fake data right now 
         var rowData = [];
         var randomTicker = "ticker";
         var randomName = "microsoft";
@@ -170,7 +170,18 @@ qx.Class.define("hackthesix.Application",
         for (var row = 0; row < rowCount; row++) {
           rowData.push([id++,randomTicker, randomName, Math.random() * 100 ]);
         }
-        return rowData;
+        return rowData;*/
+        var url = "https://www.quandl.com/api/v3/datasets/WIKI/" + ticker + ".json?api_key=mSjmVxD7fpFDXBjUsYtT";
+
+        var request = new XMLHttpRequest();
+
+        request.onreadystatechange = function() {
+          if (request.readyState == 4 && request.status == 200) {
+
+          }
+        };
+        request.open(url);
+        request.send();
       }
 
       function readTextForTicker() {
@@ -192,7 +203,7 @@ qx.Class.define("hackthesix.Application",
         for (var i = 0; i < textArr.length; i++) {
           if ( textArr[i] === textArr[i].toUpperCase() ) {
             ticker = textArr[i];
-            confirm("Are you searching for " + ticker + " stock?");
+            confirm("Are you searching for " + ticker + " stock info?");
             return ticker;
           }
         }
