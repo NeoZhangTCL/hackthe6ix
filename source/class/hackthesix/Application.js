@@ -116,6 +116,7 @@ qx.Class.define("hackthesix.Application",
         toolbar.add(uploadBtn);
         toolbar.add(runBtn);
         toolbar.add(debugBtn);
+        toolbar.add(clearBtn);
       }
 
       function createTree(page) {
@@ -160,9 +161,11 @@ qx.Class.define("hackthesix.Application",
 
       function updateStockTable(data, ticker) { 
         var price = data.dataset.data[0][4];
+        var graphNum = data.dataset.data;
         alert(ticker + " price loaded.");
         tableID++;
         tableData.push([tableID,ticker,price]);
+        graphData.push(graphNum);
         tableModel.setData(tableData);
       }
 
@@ -225,16 +228,48 @@ qx.Class.define("hackthesix.Application",
       }
 
       function compareCurrStocks() {
-        var output = "";
-        for (var i = 0; i < tableData.length; i++) {
-          output += tableData[i].toString();
-        }
-        demoRight.setValue(output);
+        createCompareWin();
       }
 
       function clearScreen() {
         demoRight.setValue("");
       }
+
+      function createCompareWin() {
+        var win = new qx.ui.window.Window("Chart Comparison", "http://icdn.pro/images/en/s/m/small-pencil-icone-4351-48.png");
+        win.setLayout(new qx.ui.layout.VBox(10));
+        win.set({
+          height: 600,
+          width:500
+        });
+
+        win.open();
+        this.getRoot.add(win, {left:350, top:120});
+
+
+        var tabView = new qx.ui.tabview.TabView;
+        win.add(tabView, {flex:1});
+
+        for (var i = 0; i < tableData.count; i++) {
+          var pageStr = "Page + " + i;
+          var page = new qx.ui.tabview.Page(pageStr);
+          page.add(new qx.ui.basic.Label("Stock"));
+          tabView.add(page);
+        }
+
+        // Test for move listener
+        win.addListener("move", function(e) {
+          this.debug("Moved to: " + e.getData().left + "x" + e.getData().top);
+        }, this);
+
+        // Test for resize listener
+        win.addListener("resize", function(e) {
+          this.debug("Resized to: " + e.getData().width + "x" + e.getData().height);
+        }, this);        
+        
+        clearScreen();
+      }
+
 
       /*function addDirListeners(dirName,dir) {
         switch(dirName) {
