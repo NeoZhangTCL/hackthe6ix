@@ -58,6 +58,8 @@ qx.Class.define("hackthesix.Application",
 
       // Document is the application root
       var doc = this.getRoot();
+      //document.getElementsByTagName("body").style.backgroundColor = "#34495e";
+
       init(doc);
 
       // Add button to document at fixed coordinates
@@ -72,6 +74,7 @@ qx.Class.define("hackthesix.Application",
         showProgressBar(page);
         createToolbar(page);
         createTree(page);
+        createStockTable(page);
       }
 
       function showProgressBar(page) {
@@ -92,7 +95,11 @@ qx.Class.define("hackthesix.Application",
         page.add(toolbar, {left:0, top:0});
 
         var fileBtn = new qx.ui.toolbar.MenuButton("File");  
+        var uploadBtn = new qx.ui.toolbar.Button("Upload");
+        var runBtn = new qx.ui.toolbar.Button("Run");
         toolbar.add(fileBtn);
+        toolbar.add(uploadBtn);
+        toolbar.add(runBtn);
       }
 
       function createTree(page) {
@@ -109,7 +116,7 @@ qx.Class.define("hackthesix.Application",
 
         var treeRoot = new qx.ui.tree.TreeFolder('Project');
         tree.setRoot(treeRoot);
-
+        treeRoot.setOpen(true);
         var stocksDir = new qx.ui.tree.TreeFolder("Stocks");
         var graphsDir = new qx.ui.tree.TreeFolder("Charting");
         var analysisDir = new qx.ui.tree.TreeFolder("Analysis");
@@ -125,6 +132,34 @@ qx.Class.define("hackthesix.Application",
         pane.add(left, 0);
         pane.add(right,1);
         page.add(pane, {left:5,top:50});
+      }
+
+      function createStockTable(page) {
+
+        var tableModel = new qx.ui.table.model.Simple();
+        tableModel.setColumns(["ID","Ticker","Company name", "Price"]);
+        tableModel.setData(grabStockData(5000));
+
+        var stockTable = new qx.ui.table.Table(tableModel).set({
+          decorator: null,
+          height: 500,
+          width: 400
+        });
+
+        page.add(stockTable, {left: 880, top: 50});
+      }
+
+      function grabStockData(rowCount) {
+        /* Using fake data right now */
+        var rowData = [];
+        var randomTicker = "ticker";
+        var randomName = "microsoft";
+
+        var id = 0;
+        for (var row = 0; row < rowCount; row++) {
+          rowData.push([id++,randomTicker, randomName, Math.random() * 100 ]);
+        }
+        return rowData;
       }
 
       function renameFile(file) {
