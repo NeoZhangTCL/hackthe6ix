@@ -53,22 +53,10 @@ qx.Class.define("hackthesix.Application",
       -------------------------------------------------------------------------
       */
 
-      // Create a button
-     // var button1 = new qx.ui.form.Button("First Button", "hackthesix/test.png");
-
       // Document is the application root
       var doc = this.getRoot();
-      //document.getElementsByTagName("body").style.backgroundColor = "#34495e";
 
       init(doc);
-
-      // Add button to document at fixed coordinates
-      //doc.add(button1, {left: 100, top: 50});
-
-      // Add an event listener
-      /*button1.addListener("execute", function(e) {
-        alert("Hello World!");
-      });*/
 
       function init(page) {
         showProgressBar(page);
@@ -109,7 +97,6 @@ qx.Class.define("hackthesix.Application",
           height: 500
         });
 
-        //tree.applyRootOpenClose();
         tree.setRootOpenClose(true);
 
         page.add(tree, {left:5, top: 50});
@@ -117,13 +104,22 @@ qx.Class.define("hackthesix.Application",
         var treeRoot = new qx.ui.tree.TreeFolder('Project');
         tree.setRoot(treeRoot);
         treeRoot.setOpen(true);
-        var stocksDir = new qx.ui.tree.TreeFolder("Stocks");
-        var graphsDir = new qx.ui.tree.TreeFolder("Charting");
-        var analysisDir = new qx.ui.tree.TreeFolder("Analysis");
 
-        treeRoot.add(stocksDir,graphsDir,analysisDir);
+        var dirNameArr = ["Stocks","Models","Charting","Analysis","Code"];
+        var dirArrMap = new Array();
+
+        dirNameArr.forEach(createDir);
+
+        function createDir(dirName) {
+          var newDir = new qx.ui.tree.TreeFolder(dirName);
+          dirArrMap.push(newDir);
+          addDirListeners(dirName,newDir);
+          treeRoot.add(newDir);
+        }
+
         var demoRight = new qx.ui.form.TextArea("");
         demoRight.setWidth(700);
+        demoRight.setWrap(false);
         showSplitScreen(page,tree,demoRight);
       }
 
@@ -149,6 +145,18 @@ qx.Class.define("hackthesix.Application",
         page.add(stockTable, {left: 880, top: 50});
       }
 
+      function addTVStockWindow(page) {
+        var htmlContent = '<script type="text/javascript" src="https://d33t3vvu2t2yu5.cloudfront.net/tv.js"></script><script type="text/javascript">new TradingView.widget({"width": 980,"height": 610,"symbol": "NASDAQ:MSFT","interval": "D","timezone": "Etc/UTC","theme": "White","style": "1","locale": "en","toolbar_bg": "#f1f3f6","enable_publishing": false,"allow_symbol_change": true,"save_image": false,"news": ["headlines"],"hideideas": true});</script>'
+        var embed = new qx.ui.embed.Html(htmlContent);
+        embed.set({
+          decorator: null,
+          height: 250,
+          width: 400
+        });
+
+        page.add(embed, {left:880,top:300});
+      }
+
       function grabStockData(rowCount) {
         /* Using fake data right now */
         var rowData = [];
@@ -162,7 +170,41 @@ qx.Class.define("hackthesix.Application",
         return rowData;
       }
 
-      function renameFile(file) {
+      function addDirListeners(dirName,dir) {
+        switch(dirName) {
+          case "Stocks":
+            dir.addListener("click", function(e) {
+              createStockChart();
+            });
+            break;
+          case "Models": 
+            dir.addListener("click", function(e) {
+
+            });
+            break;
+          case "Charting":
+            dir.addListener("click", function(e) {
+              createChartWin();
+            });
+            break;
+          case "Analysis":
+            dir.addListener("click", function(e) {
+
+            });
+            break;
+          case "Code":
+            dir.addListener("click", function(e) {
+
+            });
+            break;    
+        }
+      }
+
+      function createStockChart() {
+        
+      }
+
+      function createChartWin() {
 
       }
 
