@@ -63,20 +63,22 @@ qx.Class.define("hackthesix.Application",
       demoRight.setWrap(true);
 
       var tableModel = new qx.ui.table.model.Simple();
-      tableModel.setColumns(["ID","Ticker","Company name", "Price"]);
+      tableModel.setColumns(["ID","Ticker","Price"]);
       var stockTable = new qx.ui.table.Table(tableModel).set({
           decorator: null,
           height: 500,
-          width: 400
+          width: 340
       });
 
+      var tableData = new Array();
+      var tableID = 0;
       init(doc);
 
 
 
       /* View init as main function */
       function init(page) {
-        showProgressBar(page);
+        //showProgressBar(page);
         createToolbar(page);
         createTree(page);
         createStockTable(page);
@@ -153,34 +155,30 @@ qx.Class.define("hackthesix.Application",
 
       function createStockTable(page) {
         //tableModel.setData(grabStockData(5000));
-        page.add(stockTable, {left: 880, top: 50});
+        page.add(stockTable, {left: 890, top: 50});
       }
 
-      function updateStockTable() { 
-        tableModel.setData()
+      function updateStockTable(data, ticker) { 
+        //alert("I'm here");
+        var price = data.dataset.data[0][4];
+        alert(ticker + " price loaded.");
+        tableID++;
+        tableData.push([tableID,ticker,price]);
+        tableModel.setData(tableData);
       }
 
       function grabStockData(ticker) {
-        /* Using fake data right now 
-        var rowData = [];
-        var randomTicker = "ticker";
-        var randomName = "microsoft";
-
-        var id = 0;
-        for (var row = 0; row < rowCount; row++) {
-          rowData.push([id++,randomTicker, randomName, Math.random() * 100 ]);
-        }
-        return rowData;*/
         var url = "https://www.quandl.com/api/v3/datasets/WIKI/" + ticker + ".json?api_key=mSjmVxD7fpFDXBjUsYtT";
-
         var request = new XMLHttpRequest();
-
+        request.responseType = "json";
         request.onreadystatechange = function() {
-          if (request.readyState == 4 && request.status == 200) {
-
+          if (request.readyState === XMLHttpRequest.DONE && request.status == 200) {
+            updateStockTable(request.response, ticker);
+          } else if (request.status == 404) {
+            alert("Unable to find " + ticker);
           }
         };
-        request.open(url);
+        request.open("GET", url, true);
         request.send();
       }
 
@@ -216,14 +214,14 @@ qx.Class.define("hackthesix.Application",
       }
 
       function clearScreen() {
-        demoRight.setValue(null);
+        demoRight.setValue("");
       }
 
       function addDirListeners(dirName,dir) {
         switch(dirName) {
           case "Stocks":
             dir.addListener("dblclick", function() {
-              createStockChart();
+             // createStockChart();
             });
             break;
           case "Models": 
@@ -233,7 +231,7 @@ qx.Class.define("hackthesix.Application",
             break;
           case "Charting":
             dir.addListener("dblclick", function() {
-              createChartWin();
+              // createChartWin();
             });
             break;
           case "Analysis":
@@ -249,7 +247,7 @@ qx.Class.define("hackthesix.Application",
         }
       }
          
-      function placePopup(popupContent) {
+      /*function placePopup(popupContent) {
         var popup = new qx.ui.popup.Popup(popupContent);
         popup.placeToMouse(pageCenter);
         popup.show();
@@ -265,7 +263,7 @@ qx.Class.define("hackthesix.Application",
 
       function createChartWin() { 
 
-      }
+      }*/
 
       function errorMsg() {
         alert("ERROR!");  

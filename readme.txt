@@ -9,5 +9,7 @@ will use this and expand it into a self-contained qooxdoo application which
 can then be further extended. Please refer to the script and other documentation
 for further information.
 
+USE REACT DESKTOP NEXT TIME
+
 short:: is a standard qooxdoo GUI application
 copy_file:: tool/data/generator/needs_generation.js source/script/custom.js
