@@ -58,6 +58,7 @@ qx.Class.define("hackthesix.Application",
 
       init(doc);
 
+      /* View init as main function */
       function init(page) {
         showProgressBar(page);
         createToolbar(page);
@@ -145,18 +146,6 @@ qx.Class.define("hackthesix.Application",
         page.add(stockTable, {left: 880, top: 50});
       }
 
-      function addTVStockWindow(page) {
-        var htmlContent = '<script type="text/javascript" src="https://d33t3vvu2t2yu5.cloudfront.net/tv.js"></script><script type="text/javascript">new TradingView.widget({"width": 980,"height": 610,"symbol": "NASDAQ:MSFT","interval": "D","timezone": "Etc/UTC","theme": "White","style": "1","locale": "en","toolbar_bg": "#f1f3f6","enable_publishing": false,"allow_symbol_change": true,"save_image": false,"news": ["headlines"],"hideideas": true});</script>'
-        var embed = new qx.ui.embed.Html(htmlContent);
-        embed.set({
-          decorator: null,
-          height: 250,
-          width: 400
-        });
-
-        page.add(embed, {left:880,top:300});
-      }
-
       function grabStockData(rowCount) {
         /* Using fake data right now */
         var rowData = [];
@@ -173,38 +162,48 @@ qx.Class.define("hackthesix.Application",
       function addDirListeners(dirName,dir) {
         switch(dirName) {
           case "Stocks":
-            dir.addListener("click", function(e) {
+            dir.addListener("dblclick", function() {
               createStockChart();
             });
             break;
           case "Models": 
-            dir.addListener("click", function(e) {
+            dir.addListener("dblclick", function() {
 
             });
             break;
           case "Charting":
-            dir.addListener("click", function(e) {
+            dir.addListener("dblclick", function() {
               createChartWin();
             });
             break;
           case "Analysis":
-            dir.addListener("click", function(e) {
+            dir.addListener("dblclick", function() {
 
             });
             break;
           case "Code":
-            dir.addListener("click", function(e) {
+            dir.addListener("dblclick", function() {
 
             });
             break;    
         }
       }
 
-      function createStockChart() {
-        
+      function placePopup(popupContent) {
+        var popup = new qx.ui.popup.Popup(popupContent);
+        popup.placeToMouse(pageCenter);
+        popup.show();
       }
 
-      function createChartWin() {
+      function createStockChart() {
+        var stockChart = new qx.ui.embed.Html();
+        var HTMLContentStr = "<b>Test</b>";
+        stockChart.setHtml(HTMLContentStr);
+
+        placePopup(eventLocation,stockChart);
+      }
+
+      function createChartWin() { 
 
       }
 
